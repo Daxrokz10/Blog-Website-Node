@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "A full-stack Node.js + Express + MongoDB clone of BookMyShow, featuring movie listings, authentication (login/signup), session management, and a modern UI with EJS and Bootstrap.",
   "dependencies": {
     "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
@@ -25,5 +25,13 @@
     "multer": "^2.0.2",
     "nodemon": "^3.1.10",
     "passport": "^0.7.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daxrokz10/Blog-Website-Node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Daxrokz10/Blog-Website-Node/issues"
+  },
+  "homepage": "https://github.com/Daxrokz10/Blog-Website-Node#readme"
 }
