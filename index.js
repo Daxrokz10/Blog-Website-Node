@@ -9,7 +9,7 @@ require('dotenv').config(); // Make sure this is at the top
 
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/',router);
 
