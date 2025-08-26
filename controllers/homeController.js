@@ -46,3 +46,8 @@ module.exports.signupHandle = async (req, res) => {
     }
 }
 
+module.exports.logout = (req,res)=>{
+    req.session.destroy(()=>{
+        return res.redirect('/login');
+    })
+}
