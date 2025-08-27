@@ -18,7 +18,12 @@ module.exports.loginHandle = async (req, res) => {
     if (user && await bcrypt.compare(password, user.password)) {
         req.session.userId = user._id;
         req.session.username = user.username;
-        return res.redirect('/');
+        req.session.role = user.role;
+        if(user.role == "admin"){
+            return res.redirect('/admin');
+        }else{
+            return res.redirect('/blog');
+        }
     } else {
         return res.redirect('/?loginError=1');
     }
@@ -46,3 +51,8 @@ module.exports.signupHandle = async (req, res) => {
     }
 }
 
+module.exports.logout = (req,res)=>{
+    req.session.destroy(()=>{
+        return res.redirect('/login');
+    })
+}
