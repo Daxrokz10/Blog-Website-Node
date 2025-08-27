@@ -1,7 +1,7 @@
 const User = require('../models/userSchema');
 const bcrypt = require('bcrypt');
 
-module.exports.homePage = (req, res) => {
+module.exports.homePageAdmin = (req, res) => {
     if(req.session && req.session.userId){
         console.log('Session active');
         return res.render('index');
@@ -9,11 +9,21 @@ module.exports.homePage = (req, res) => {
         return res.redirect('/login');
     }
 }
+
+module.exports.homePageUser = (req, res) => {
+    if(req.session && req.session.userId){
+        console.log('Session active');
+        return res.render('./pages/blogHome');
+    }else{
+        return res.redirect('/login');
+    }
+}
+
 module.exports.login = (req, res) => {
     return res.render('./pages/login');
 }
 module.exports.loginHandle = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, role } = req.body;
     const user = await User.findOne({ username });
     if (user && await bcrypt.compare(password, user.password)) {
         req.session.userId = user._id;
@@ -32,14 +42,14 @@ module.exports.signup = (req, res) => {
     return res.render('./pages/signup')
 }
 module.exports.signupHandle = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password ,role} = req.body;
     try {
         const existing = await User.findOne({ $or: [{ username }, { email }] });
         if (existing) {
             return res.redirect('/?signupError=1');
         } else {
             const hashed = await bcrypt.hash(password, 10);
-            const newUser = await User.create({ username, email, password: hashed });
+            const newUser = await User.create({ username, email, password: hashed ,role});
             console.log("New User Created", newUser);
 
         }
