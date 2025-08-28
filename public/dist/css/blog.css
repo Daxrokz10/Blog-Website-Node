@@ -1,57 +1,71 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body{
-    background-color: white;
-    color: black;
+body {
+  background-color: #fff;
+  color: #000;
+  font-family: "Inter", sans-serif;
 }
 
-/* TABS */
-
-.content-tab{
-    width: 100%;
-}
-
-.tabs {
-    margin-top: 20px;
-    margin-bottom: 30px;
-    display: flex;
-    gap: 20px;
-    justify-content: flex-start;
-}
-
+/* Tabs */
 .tab-box {
-    background: #d1d1d1;
-    border-radius: 10px;
-    padding: 10px 32px;
-    text-align: center;
-    transition: background 0.2s;
-    min-width: 120px;
-    font-weight: 500;
-    font-size: 1.1em;
-    margin-right: 10px;
-    display: inline-block;
+  background: #e7e7e7;
+  border-radius: 10px;
+  padding: 10px 0;         /* taller for button feel */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s ease;
 }
 
-.tab-box a {
-    color: #222;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    height: 100%;
+.tab-box.active, .tab-box:hover {
+  background: #696969;
 }
 
-.tab-box:hover, .tab-box.active {
-    background: #999898;
+/* Card Styling */
+.card-clean {
+  border: 0;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-/* Overlay for card image text */
-.card-img-overlay.custom-overlay {
-    background: linear-gradient(to top, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0.1) 100%);
-    border-radius: 0 0 1rem 1rem;
+.thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;  /* uniform shape */
+  overflow: hidden;
+  border-radius: 12px;
 }
-.card-title, .card-img-overlay p {
-    color: #fff !important;
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay styling */
+.overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 100%);
+  color: #fff;
+}
+
+.overlay h6 {
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.overlay small {
+  opacity: .85;
+}
+
+.discussions{
+    background-color: #e7e7e7;
+}
+.drag-box{
+    background-color: #e7e7e7;
+}
+
+.logo{
+    margin-left: -35px;
 }

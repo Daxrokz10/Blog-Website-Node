@@ -35,5 +35,6 @@
   "bugs": {
     "url": "https://github.com/Daxrokz10/Blog-Website-Node/issues"
   },
-  "homepage": "https://github.com/Daxrokz10/Blog-Website-Node#readme"
+  "homepage": "https://github.com/Daxrokz10/Blog-Website-Node#readme",
+  "devDependencies": {}
 }

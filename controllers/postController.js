@@ -8,7 +8,7 @@ exports.feed = async (req, res) => {
 };
 
 exports.createForm = (req, res) => {
-  res.render('./pages/writer/writerHome'); // contains the create-post form
+  res.render('./pages/writer/writerHome'); 
 };
 
 exports.create = async (req, res) => {
