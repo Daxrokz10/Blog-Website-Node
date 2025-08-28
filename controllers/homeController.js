@@ -1,26 +1,56 @@
 const User = require('../models/userSchema');
 const bcrypt = require('bcrypt');
 
-module.exports.homePageAdmin = (req, res) => {
+
+module.exports.defaultRoute = (req,res)=>{
     if(req.session && req.session.userId){
         console.log('Session active');
-        return res.render('index');
+        if(req.session.role == "admin"){
+            return res.redirect('/admin');
+        }else{
+            return res.redirect('/blog');
+        }
     }else{
         return res.redirect('/login');
     }
 }
 
-module.exports.homePageUser = (req, res) => {
+module.exports.homePageAdmin = (req, res) => {
     if(req.session && req.session.userId){
         console.log('Session active');
-        return res.render('./pages/blogHome');
+        if(req.session.role == "admin"){
+            return res.render('index');
+        }else{
+            return res.redirect('/blog');
+        }
+    }else{
+        return res.redirect('/login');
+    }
+}
+
+module.exports.homePageReader = (req, res) => {
+    if(req.session && req.session.userId){
+        console.log('Session active');
+        if(req.session.role == "user"){
+            return res.render('./pages/blog/blogHome');
+        }
+    }else{
+        return res.redirect('/login');
+    }
+}
+module.exports.homePageWriter = (req, res) => {
+    if(req.session && req.session.userId){
+        console.log('Session active');
+        if(req.session.role == "user"){
+            return res.render('./pages/writer/writerHome');
+        }
     }else{
         return res.redirect('/login');
     }
 }
 
 module.exports.login = (req, res) => {
-    return res.render('./pages/login');
+    return res.render('./pages/auth/login');
 }
 module.exports.loginHandle = async (req, res) => {
     const { username, password, role } = req.body;
@@ -39,7 +69,7 @@ module.exports.loginHandle = async (req, res) => {
     }
 }
 module.exports.signup = (req, res) => {
-    return res.render('./pages/signup')
+    return res.render('./pages/auth/signup')
 }
 module.exports.signupHandle = async (req, res) => {
     const { username, email, password ,role} = req.body;
