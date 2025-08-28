@@ -1,6 +1,6 @@
 const User = require('../models/userSchema');
 const bcrypt = require('bcrypt');
-
+const Post = require('../models/Post')
 
 module.exports.defaultRoute = (req,res)=>{
     if(req.session && req.session.userId){
@@ -28,26 +28,17 @@ module.exports.homePageAdmin = (req, res) => {
     }
 }
 
-module.exports.homePageReader = (req, res) => {
-    if(req.session && req.session.userId){
-        console.log('Session active');
-        if(req.session.role == "user"){
-            return res.render('./pages/blog/blogHome');
-        }
-    }else{
-        return res.redirect('/login');
-    }
-}
+module.exports.homePageReader = async (req, res) => {
+  if (!req.session?.userId) return res.redirect('/login');
+  // allow both roles to see feed
+  const posts = await Post.find().populate('author', 'username').sort({ createdAt: -1 });
+  return res.render('./pages/blog/blogHome', { posts });
+};
+
 module.exports.homePageWriter = (req, res) => {
-    if(req.session && req.session.userId){
-        console.log('Session active');
-        if(req.session.role == "user"){
-            return res.render('./pages/writer/writerHome');
-        }
-    }else{
-        return res.redirect('/login');
-    }
-}
+  if (!req.session?.userId) return res.redirect('/login');
+  return res.render('./pages/writer/writerHome'); // the create form
+};
 
 module.exports.login = (req, res) => {
     return res.render('./pages/auth/login');
