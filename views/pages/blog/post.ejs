@@ -4,37 +4,70 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= post.title %> • Inkwell</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f8f9fa; }
+    .post-card { background: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .post-cover { border-radius: 1rem; max-height: 400px; object-fit: cover; }
+    .comment-box { border-left: 3px solid #212529; padding-left: 1rem; margin-bottom: 1rem; }
+    .comment-author { font-weight: 600; }
+    .like-btn { border-radius: 50px; padding: 0.5rem 1.2rem; }
+  </style>
 </head>
-<body class="bg-light">
-  <div class="container py-5" style="max-width: 900px;">
-    <a href="/blog" class="text-decoration-none small">← Back</a>
-    <h2 class="fw-bold mt-2"><%= post.title %></h2>
-    <p class="text-muted">by <%= post.author.username %></p>
+<body>
+  <div class="container py-5" style="max-width: 850px;">
+    
+    <!-- Back link -->
+    <a href="/blog" class="text-decoration-none small text-muted">← Back to Blog</a>
+
+    <!-- Post Header -->
+    <div class="mt-3 mb-4">
+      <h1 class="fw-bold"><%= post.title %></h1>
+      <p class="text-muted mb-1">by <span class="fw-semibold"><%= post.author.username %></span></p>
+      <small class="text-muted"><%= new Date(post.createdAt).toLocaleDateString() %></small>
+    </div>
+
+    <!-- Cover Image -->
     <% if (post.coverUrl) { %>
-      <img class="img-fluid rounded mb-4" src="<%= post.coverUrl %>" alt="">
+      <img class="img-fluid post-cover mb-4" src="<%= post.coverUrl %>" alt="">
     <% } %>
-    <div class="bg-white p-4 rounded shadow-sm mb-4">
+
+    <!-- Post Body -->
+    <div class="post-card mb-4">
       <%= post.body %>
     </div>
 
-    <form method="POST" action="/posts/<%= post._id %>/like" class="mb-4">
-      <button class="btn btn-dark btn-sm">❤️ Like (<%= post.likes.length %>)</button>
+    <!-- Like Button -->
+    <form method="POST" action="/posts/<%= post._id %>/like" class="mb-5">
+      <button class="btn btn-dark like-btn">❤️ Like (<%= post.likes.length %>)</button>
     </form>
 
-    <h5>Comments</h5>
-    <form method="POST" action="/posts/<%= post._id %>/comments" class="mb-3">
-      <textarea class="form-control mb-2" name="body" required rows="3" placeholder="Write a comment"></textarea>
-      <button class="btn btn-outline-dark btn-sm">Comment</button>
-    </form>
+    <!-- Comments Section -->
+    <div>
+      <h4 class="fw-bold mb-3">💬 Comments</h4>
 
-    <ul class="list-group">
-      <% post.comments.slice().reverse().forEach(c => { %>
-        <li class="list-group-item">
-          <b><%= c.author?.username || 'User' %>:</b> <%= c.body %>
-          <div class="text-muted small"><%= new Date(c.createdAt).toLocaleString() %></div>
-        </li>
-      <% }) %>
-    </ul>
+      <!-- Comment Form -->
+      <form method="POST" action="/posts/<%= post._id %>/comments" class="mb-4">
+        <textarea class="form-control mb-2" name="body" required rows="3" placeholder="Write a comment..."></textarea>
+        <button class="btn btn-outline-dark">Post Comment</button>
+      </form>
+
+      <!-- Comment List -->
+      <% if (post.comments.length === 0) { %>
+        <p class="text-muted fst-italic">No comments yet. Be the first to share your thoughts!</p>
+      <% } else { %>
+        <div class="list-group">
+          <% post.comments.slice().reverse().forEach(c => { %>
+            <div class="list-group-item border-0 border-bottom">
+              <div class="comment-box">
+                <div class="comment-author"><%= c.author?.username || 'Anonymous' %></div>
+                <p class="mb-1"><%= c.body %></p>
+                <div class="text-muted small"><%= new Date(c.createdAt).toLocaleString() %></div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
   </div>
 </body>
 </html>
