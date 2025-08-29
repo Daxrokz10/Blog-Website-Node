@@ -1,64 +1,129 @@
- body {
-      background: #111;
-      color: #eee;
-      font-family: "Inter", sans-serif;
-    }
-    .nav-tabs-custom button {
-      background: #2a2a2a;
-      border: none;
-      border-radius: 8px;
-      color: #ddd;
-      padding: 10px 24px;
-      margin-right: 8px;
-      transition: 0.2s;
-    }
-    .nav-tabs-custom button:hover {
-      background: #3a3a3a;
-    }
-    .card-dark {
-      background: #1b1b1b;
-      border-radius: 12px;
-      padding: 20px;
-      border: none;
-      color: #ddd;
-    }
-    .btn-dark-tile {
-      background: #2a2a2a;
-      border-radius: 12px;
-      padding: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: 500;
-      color: #ddd;
-      border: none;
-      width: 100%;
-      transition: 0.2s;
-    }
-    .btn-dark-tile:hover {
-      background: #3a3a3a;
-    }
-    .mini-card {
-      background: #2a2a2a;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-    }
-    .profile-card {
-      background: #1b1b1b;
-      border-radius: 12px;
-      padding: 20px;
-    }
-    .recent-publish img {
-      border-radius: 12px;
-      width: 100%;
-    }
-    .recent-publish .title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-top: 6px;
-    }
-    .recent-publish .author {
-      font-size: 12px;
-      color: #aaa;
-    }
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+}
+
+.logo {
+  margin-left: -35px;
+
+}
+
+/* Tabs */
+.tab-box {
+  background: #454545;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s ease;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.tab-box.active,
+.tab-box:hover {
+  background: #d1d1d1;
+  color: #000;
+}
+
+/* Jot Thoughts */
+.jot-box {
+  background-color: #454545;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* Gray cards */
+.box-gray {
+  background-color: #454545;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+}
+
+/* Profile box */
+.profile-box {
+  background-color: #2b2b2b;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+}
+
+/* Card-clean for thumbnails */
+.card-clean {
+  border: 0;
+  background: none;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.65));
+  z-index: 1;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  color: #fff;
+  z-index: 2;
+}
+
+.overlay h6 {
+  margin: 0;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.overlay small {
+  font-size: .75rem;
+  opacity: .85;
+}
+
+/* Modern form styling */
+.modern-form .form-control {
+  background-color: #2b2b2b !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.modern-form .form-control:focus {
+  border-color: #fff !important;
+  box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.25) !important;
+}
+
+.modern-form label {
+  color: #aaa;
+}
+
+.modern-form textarea {
+  resize: none;
+}

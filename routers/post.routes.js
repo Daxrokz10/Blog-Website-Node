@@ -15,4 +15,11 @@ router.get('/:id', allowUsers, ctrl.show);
 router.post('/:id/like', isAuth, ctrl.toggleLike);
 router.post('/:id/comments', isAuth, ctrl.addComment);
 
+// edit + update
+router.get('/:id/edit', isAuth, ctrl.editForm);
+router.post('/:id/edit', isAuth, upload.single('cover'), ctrl.update);
+
+// delete
+router.post('/:id/delete', isAuth, ctrl.destroy);
+
 module.exports = router;

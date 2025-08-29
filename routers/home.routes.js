@@ -17,4 +17,6 @@ homeRouter.post('/signup',homeController.signupHandle);
 
 homeRouter.get('/logout',homeController.logout);
 
+homeRouter.get('/profile', homeController.profilePage);
+
 module.exports = homeRouter;

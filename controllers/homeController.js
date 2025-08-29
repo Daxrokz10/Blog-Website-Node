@@ -35,9 +35,22 @@ module.exports.homePageReader = async (req, res) => {
   return res.render('./pages/blog/blogHome', { posts });
 };
 
-module.exports.homePageWriter = (req, res) => {
-  if (!req.session?.userId) return res.redirect('/login');
-  return res.render('./pages/writer/writerHome'); // the create form
+module.exports.homePageWriter = async (req, res) => {
+  try {
+    if (!req.session?.userId) {
+      return res.redirect('/login');
+    }
+
+    const posts = await Post.find({ author: req.session.userId }).sort({ createdAt: -1 });
+
+    res.render("pages/writer/writerHome", {
+      user: req.session,
+      posts
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
 };
 
 module.exports.login = (req, res) => {
@@ -87,3 +100,9 @@ module.exports.logout = (req,res)=>{
         return res.redirect('/login');
     })
 }
+
+module.exports.profilePage = async (req, res) => {
+  if (!req.session?.userId) return res.redirect('/login');
+  const posts = await Post.find({ author: req.session.userId }).sort({ createdAt: -1 });
+  res.render('./pages/writer/profile', { posts, user: req.session });
+};
