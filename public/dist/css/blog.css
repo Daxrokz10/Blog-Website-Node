@@ -103,3 +103,6 @@ body {
 .logo {
   margin-left: -35px;
 }
+.bg-active{
+  background-color: #7c7c7c;
+}

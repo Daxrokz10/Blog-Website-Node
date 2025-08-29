@@ -24,6 +24,11 @@
         <span class="text-muted small">Your favourite author’s new work is out now…</span>
         <button class="btn btn-light rounded-circle">🔔</button>
         <a href="/profile"><img src="https://i.pravatar.cc/40" class="rounded-circle" alt="profile"></a>
+        <form action="/logout" method="GET" class="m-0">
+          <button type="submit" class="btn btn-outline-dark rounded-pill px-3 py-1 fw-semibold shadow-sm logout-btn">
+            ⎋ Logout
+          </button>
+        </form>
       </div>
     </div>
 
@@ -33,7 +38,7 @@
 
         <div class="row mb-2">
           <div class="col-3">
-            <a href="/post" class="text-decoration-none text-black tab-box">Latest</a>
+            <a href="/post" class="text-decoration-none text-black tab-box bg-active">Latest</a>
           </div>
           <div class="col-3">
             <a href="/post" class="text-decoration-none text-black tab-box">Following</a>
@@ -58,11 +63,11 @@
                       <p class="fs-1 mt-2">|</p>
                       <div class="heading ms-2">
                         <h6>
-                        <%= p.title %>
-                      </h6>
-                      <small>
-                        <%= p.author?.username %>
-                      </small>
+                          <%= p.title %>
+                        </h6>
+                        <small>
+                          <%= p.author?.username %>
+                        </small>
                       </div>
                     </div>
                   </div>
@@ -84,11 +89,11 @@
                       <p class="fs-1 mt-2">|</p>
                       <div class="heading ms-2">
                         <h6>
-                        <%= p.title %>
-                      </h6>
-                      <small>
-                        <%= p.author?.username %>
-                      </small>
+                          <%= p.title %>
+                        </h6>
+                        <small>
+                          <%= p.author?.username %>
+                        </small>
                       </div>
                     </div>
                   </div>
