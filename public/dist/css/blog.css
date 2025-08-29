@@ -4,68 +4,102 @@ body {
   font-family: "Inter", sans-serif;
 }
 
-/* Tabs */
 .tab-box {
-  background: #e7e7e7;
-  border-radius: 10px;
-  padding: 10px 0;         /* taller for button feel */
+  background: #f1f1f1;
+  border-radius: 8px;
+  padding: 10px;
   font-weight: 500;
   cursor: pointer;
   transition: all .2s ease;
+  display: block;     /* ensures it fills col-3 */
+  width: 100%;        /* 👈 forces full width inside each col-3 */
+  text-align: center; /* centers the text */
 }
 
-.tab-box.active, .tab-box:hover {
-  background: #696969;
+.tab-box.active,
+.tab-box:hover {
+  background: #d1d1d1;
 }
 
-/* Card Styling */
+/* General card reset */
 .card-clean {
   border: 0;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  background: none;
   border-radius: 12px;
   overflow: hidden;
+  position: relative;
 }
 
+/* Thumbnail base */
 .thumb {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;  /* uniform shape */
-  overflow: hidden;
+  aspect-ratio: 16 / 9;
   border-radius: 12px;
+  overflow: hidden;
+}
+
+.thumb.small {
+  aspect-ratio: 1 / 1;
+  /* square for small cards */
 }
 
 .thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* Overlay styling */
+/* Gradient overlay on image */
+.thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.65));
+  z-index: 1;
+}
+
+/* Overlay text */
 .overlay {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 14px 16px;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 100%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
   color: #fff;
+  z-index: 2;
 }
 
 .overlay h6 {
-  margin: 0 0 4px;
-  font-weight: 700;
+  margin: 0;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.overlay small {
+  font-size: .75rem;
+  opacity: .85;
+}
+
+/* Tighter grid spacing */
+.row.g-3 {
+  --bs-gutter-x: .75rem;
+  --bs-gutter-y: .75rem;
 }
 
 .overlay small {
   opacity: .85;
 }
 
-.discussions{
-    background-color: #e7e7e7;
-}
-.drag-box{
-    background-color: #e7e7e7;
+.discussions {
+  background-color: #e7e7e7;
 }
 
-.logo{
-    margin-left: -35px;
+.drag-box {
+  background-color: #e7e7e7;
+}
+
+.logo {
+  margin-left: -35px;
 }

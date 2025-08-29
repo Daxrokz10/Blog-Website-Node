@@ -1,0 +1,64 @@
+ body {
+      background: #111;
+      color: #eee;
+      font-family: "Inter", sans-serif;
+    }
+    .nav-tabs-custom button {
+      background: #2a2a2a;
+      border: none;
+      border-radius: 8px;
+      color: #ddd;
+      padding: 10px 24px;
+      margin-right: 8px;
+      transition: 0.2s;
+    }
+    .nav-tabs-custom button:hover {
+      background: #3a3a3a;
+    }
+    .card-dark {
+      background: #1b1b1b;
+      border-radius: 12px;
+      padding: 20px;
+      border: none;
+      color: #ddd;
+    }
+    .btn-dark-tile {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 500;
+      color: #ddd;
+      border: none;
+      width: 100%;
+      transition: 0.2s;
+    }
+    .btn-dark-tile:hover {
+      background: #3a3a3a;
+    }
+    .mini-card {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .profile-card {
+      background: #1b1b1b;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .recent-publish img {
+      border-radius: 12px;
+      width: 100%;
+    }
+    .recent-publish .title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .recent-publish .author {
+      font-size: 12px;
+      color: #aaa;
+    }
