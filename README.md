@@ -2,6 +2,10 @@
 
 Inkwell is a full-stack blogging platform where readers can discover posts and writers can create and manage their content. It features a Reader Mode for exploring new posts, and a Writer Mode for authors to write, edit, and manage their work.
 
+Deploy Link - https://blog-website-node-b3za.onrender.com
+
+![alt text](./public/assets/images/image.png)
+
 🚀 Features
 
 Authentication (login / signup / logout)
