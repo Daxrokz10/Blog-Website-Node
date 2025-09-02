@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
     const post = new Post({
       title,
       body,
-      author: req.session.userId
+      author: req.user._id
     });
     if (req.file) {
       post.coverUrl = req.file.path;        // cloudinary url
@@ -36,13 +36,13 @@ exports.show = async (req, res) => {
     .populate('author', 'username')
     .populate('comments.author', 'username');
   if (!post) return res.redirect('/blog');
-  res.render('./pages/blog/post', { post, me: req.session.userId });
+  res.render('./pages/blog/post', { post, me: req.user._id });
 };
 
 exports.toggleLike = async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.redirect('/blog');
-  const uid = req.session.userId.toString();
+  const uid = req.user._id.toString();
   const i = post.likes.findIndex(x => x.toString() === uid);
   if (i >= 0) post.likes.splice(i, 1);
   else post.likes.push(uid);
@@ -54,14 +54,14 @@ exports.addComment = async (req, res) => {
   const { body } = req.body;
   if (!body?.trim()) return res.redirect('/posts/' + req.params.id);
   await Post.findByIdAndUpdate(req.params.id, {
-    $push: { comments: { author: req.session.userId, body } }
+    $push: { comments: { author: req.user._id, body } }
   });
   res.redirect('/posts/' + req.params.id);
 };
 
 exports.editForm = async (req, res) => {
   const post = await Post.findById(req.params.id);
-  if (!post || post.author.toString() !== req.session.userId.toString()) {
+  if (!post || post.author.toString() !== req.user._id.toString()) {
     return res.redirect('/blog');
   }
   res.render('./pages/writer/editPost', { post });
@@ -70,7 +70,7 @@ exports.editForm = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (!post || post.author.toString() !== req.session.userId.toString()) {
+    if (!post || post.author.toString() !== req.user._id.toString()) {
       return res.redirect('/blog');
     }
 
@@ -91,7 +91,7 @@ exports.update = async (req, res) => {
 exports.destroy = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (!post || post.author.toString() !== req.session.userId.toString()) {
+    if (!post || post.author.toString() !== req.user._id.toString()) {
       return res.redirect('/blog');
     }
     await Post.findByIdAndDelete(req.params.id);

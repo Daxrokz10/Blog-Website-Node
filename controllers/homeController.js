@@ -1,77 +1,68 @@
 const User = require('../models/userSchema');
 const bcrypt = require('bcrypt');
-const Post = require('../models/Post')
+const Post = require('../models/Post');
+const passport = require('passport');
 
-module.exports.defaultRoute = (req,res)=>{
-    if(req.session && req.session.userId){
-        console.log('Session active');
-        if(req.session.role == "admin"){
-            return res.redirect('/admin');
-        }else{
-            return res.redirect('/blog');
-        }
-    }else{
-        return res.redirect('/login');
+module.exports.defaultRoute = (req, res) => {
+  if (req.isAuthenticated()) {
+    if (req.user.role === "admin") {
+      return res.redirect("/admin");
+    } else {
+      return res.redirect("/blog");
     }
-}
+  } else {
+    return res.redirect("/login");
+  }
+};
+
 
 module.exports.homePageAdmin = (req, res) => {
-    if(req.session && req.session.userId){
-        console.log('Session active');
-        if(req.session.role == "admin"){
-            return res.render('index');
-        }else{
-            return res.redirect('/blog');
-        }
-    }else{
-        return res.redirect('/login');
-    }
-}
+  if (req.isAuthenticated() && req.user.role === "admin") {
+    return res.render("index");
+  } else {
+    return res.redirect("/login");
+  }
+};
 
 module.exports.homePageReader = async (req, res) => {
-  if (!req.session?.userId) return res.redirect('/login');
-  // allow both roles to see feed
-  const posts = await Post.find().populate('author', 'username').sort({ createdAt: -1 });
-  return res.render('./pages/blog/blogHome', { posts });
+  if (!req.isAuthenticated()) return res.redirect("/login");
+
+  const posts = await Post.find()
+    .populate("author", "username")
+    .sort({ createdAt: -1 });
+
+  return res.render("./pages/blog/blogHome", { posts });
 };
 
 module.exports.homePageWriter = async (req, res) => {
-  try {
-    if (!req.session?.userId) {
-      return res.redirect('/login');
-    }
+  if (!req.isAuthenticated()) return res.redirect("/login");
 
-    const posts = await Post.find({ author: req.session.userId }).sort({ createdAt: -1 });
+  const posts = await Post.find({ author: req.user._id }).sort({ createdAt: -1 });
 
-    res.render("pages/writer/writerHome", {
-      user: req.session,
-      posts
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server Error");
-  }
+  res.render("pages/writer/writerHome", {
+    user: req.user,
+    posts,
+  });
 };
 
 module.exports.login = (req, res) => {
     return res.render('./pages/auth/login');
 }
-module.exports.loginHandle = async (req, res) => {
-    const { username, password, role } = req.body;
-    const user = await User.findOne({ username });
-    if (user && await bcrypt.compare(password, user.password)) {
-        req.session.userId = user._id;
-        req.session.username = user.username;
-        req.session.role = user.role;
-        if(user.role == "admin"){
-            return res.redirect('/admin');
-        }else{
-            return res.redirect('/blog');
-        }
-    } else {
-        return res.redirect('/?loginError=1');
-    }
-}
+module.exports.loginHandle = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.redirect('/login?error=1');
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      if (user.role === "admin") {
+        return res.redirect('/admin');
+      } else {
+        return res.redirect('/blog');
+      }
+    });
+  })(req, res, next);
+};
 module.exports.signup = (req, res) => {
     return res.render('./pages/auth/signup')
 }
@@ -95,14 +86,15 @@ module.exports.signupHandle = async (req, res) => {
     }
 }
 
-module.exports.logout = (req,res)=>{
-    req.session.destroy(()=>{
-        return res.redirect('/login');
-    })
-}
+module.exports.logout = (req, res, next) => {
+  req.logout(err => {
+    if (err) return next(err);
+    res.redirect('/login');
+  });
+};
 
 module.exports.profilePage = async (req, res) => {
-  if (!req.session?.userId) return res.redirect('/login');
-  const posts = await Post.find({ author: req.session.userId }).sort({ createdAt: -1 });
-  res.render('./pages/writer/profile', { posts, user: req.session });
+  if (!req.isAuthenticated()) return res.redirect('/login');
+  const posts = await Post.find({ author: req.user._id }).sort({ createdAt: -1 });
+  res.render('./pages/writer/profile', { posts, user: req.user });
 };
