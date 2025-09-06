@@ -6,8 +6,8 @@ const app = express();
 const path = require('path');
 const router = require('./routers');
 const MongoStore = require('connect-mongo');
-const passport = require('passport')
-const initializePassport = require('./middlewares/passport')
+const passport = require('passport');
+const initializePassport = require('./middlewares/passport');
 
 const port = process.env.port || 3000;
 require('dotenv').config(); 
