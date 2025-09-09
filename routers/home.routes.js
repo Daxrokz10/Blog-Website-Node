@@ -2,7 +2,7 @@ const express = require('express');
 const homeRouter = express.Router();
 const homeController = require('../controllers/homeController');
 const { isAuth, allowUsers } = require('../middlewares/auth');
-
+const uploadProfile = require('../middlewares/uploadProfile');
 
 homeRouter.get('/',homeController.defaultRoute);
 
@@ -22,6 +22,7 @@ homeRouter.get('/logout',homeController.logout);
 homeRouter.get('/profile', homeController.profilePage);
 
 //edit bio
-homeRouter.get("/editBio",isAuth,homeController.editBio)
+homeRouter.get("/editBio",isAuth,homeController.editBio);
+homeRouter.post("/editBio",isAuth,uploadProfile.single('profilePicture'),homeController.editBioHandle);
 
 module.exports = homeRouter;

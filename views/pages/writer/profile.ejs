@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-  <title><%= user.username %>’s Profile</title>
+  <title>
+    <%= user.username %>’s Profile
+  </title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -16,31 +18,94 @@
 
     <!-- Profile -->
     <div class="profile-card d-flex align-items-center">
-      <img src="https://i.pravatar.cc/150?u=<%= user.username %>" alt="profile" class="profile-img me-4">
+      <img src="<%= user.profilePicture && user.profilePicture.trim() !== '' 
+          ? user.profilePicture 
+          : 'https://i.pravatar.cc/150?u=' + user.username %>"  alt="profile" class="profile-img me-4">
       <div>
-        <h3 class="mb-1"><%= user.username %></h3>
+        <h3 class="mb-1">
+          <%= user.username %>
+        </h3>
         <span class="premium">Premium User</span>
         <p class="mb-0 small">Member since Nov 22, 2022</p>
+      </div>
+      <div class="ms-auto">
+         <a href="/editBio" class="btn btn-sm btn-success">
+            ✏️ Edit Your Profile
+          </a>
       </div>
     </div>
 
     <!-- Bio & Details -->
-    <div class="profile-card">
-      <div class="row g-4">
-        <div class="col-md-6">
-          <p><strong>My Role:</strong> Beatmaker</p>
-          <p><strong>My 3 Favorite Artists:</strong> Ninho, Travis Scott, Metro Boomin</p>
-          <p><strong>The Software I Use:</strong> Ableton</p>
-          <p><strong>My City:</strong> California, USA</p>
+    <div class="profile-card position-relative">
+      <% if(user.favoriteArtists=="" && user.software=="" && user.favoriteGenre=="" && user.preferredMood=="" &&
+        user.city=="" && user.badges=="" && user.tags=="" && user.bio=="" ){ %>
+
+        <!-- Blur this only -->
+        <div class="blur-content">
+          <div class="row g-4">
+            <div class="col-md-12">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <p><strong>My Role:</strong></p>
+                  <p><strong>My 3 Favorite Artists:</strong></p>
+                  <p><strong>The Software I Use:</strong></p>
+                  <p><strong>My City:</strong></p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Experience:</strong></p>
+                  <p><strong>Favorite Genre:</strong></p>
+                  <p><strong>Preferred Mood:</strong></p>
+                  <p><strong>Availability:</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6">
-          <p><strong>Experience:</strong> Intermediate</p>
-          <p><strong>Favorite Genre:</strong> Trap</p>
-          <p><strong>Preferred Mood:</strong> Melancholic</p>
-          <p><strong>Availability:</strong> ✅ Available for Collaboration</p>
+
+        <!-- Overlay (not blurred) -->
+        <div class="overlay-text">
+          <a href="/editBio" class="btn btn-sm btn-success">
+            ✏️ Complete your bio
+          </a>
         </div>
-      </div>
+
+        <% } else { %>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <p><strong>My Role:</strong>
+                <%= user.role %>
+              </p>
+              <p><strong>My 3 Favorite Artists:</strong>
+                <%= user.favoriteArtists %>
+              </p>
+              <p><strong>The Software I Use:</strong>
+                <%= user.software %>
+              </p>
+              <p><strong>My City:</strong>
+                <%= user.city %>
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Experience:</strong>
+                <%= user.experienceLevel %>
+              </p>
+              <p><strong>Favorite Genre:</strong>
+                <%= user.favoriteGenre %>
+              </p>
+              <p><strong>Preferred Mood:</strong>
+                <%= user.preferredMood %>
+              </p>
+              <p><strong>Availability:</strong>
+                <%= user.availability %>
+              </p>
+            </div>
+          </div>
+          <% } %>
     </div>
+
+
+    </div>
+
 
     <!-- Social Media -->
     <div class="profile-card">
@@ -55,10 +120,10 @@
     <!-- Collection -->
     <div class="profile-card">
       <h5 class="section-title">My Collection</h5>
-      <% if(posts.length > 0){ %>
+      <% if(posts.length> 0){ %>
         <div class="row g-3">
           <% posts.forEach(p=>{ %>
-           <div class="col-md-6">
+            <div class="col-md-6">
               <div class="card post-card p-3 shadow-sm">
                 <h5>
                   <a href="/posts/<%= p._id %>" class="text-decoration-none text-dark">
@@ -75,14 +140,13 @@
                   <small class="text-muted">Updated: <%= p.updatedAt.toDateString() %></small>
                 </div>
               </div>
-            </div> 
-          <% }) %>
+            </div>
+            <% }) %>
         </div>
-      <% } else{ %>
-        <p>You have no posts</p>
-      <% } %>
+        <% } else{ %>
+          <p>You have no posts</p>
+          <% } %>
     </div>
-    <a href="/editBio ">Edit</a>
   </main>
 
   <!-- Bootstrap JS -->

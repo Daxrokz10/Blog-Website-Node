@@ -24,7 +24,9 @@
       <div class="d-flex align-items-center gap-3">
         <span class="text-secondary small">You have got a comment on your latest blog...</span>
         <button class="btn btn-light rounded-circle">🔔</button>
-        <a href="/profile"><img src="https://i.pravatar.cc/40" class="rounded-circle" alt="profile"></a>
+        <a href="/profile"><img src="<%= user.profilePicture && user.profilePicture.trim() !== '' 
+          ? user.profilePicture 
+          : 'https://i.pravatar.cc/150?u=' + user.username %>"  alt="profile" class="profile-img me-4"></a>
         <form action="/logout" method="GET" class="m-0">
           <button type="submit" class="btn btn-outline-dark rounded-pill px-3 py-1 fw-semibold shadow-sm logout-btn">
             ⎋ Logout

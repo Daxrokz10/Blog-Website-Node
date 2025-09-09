@@ -21,6 +21,14 @@ body {
   background: #d1d1d1;
 }
 
+.profile-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid #333;
+  object-fit: cover;
+}
+
 /* General card reset */
 .card-clean {
   border: 0;

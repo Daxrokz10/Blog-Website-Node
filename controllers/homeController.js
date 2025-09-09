@@ -31,7 +31,7 @@ module.exports.homePageReader = async (req, res) => {
     .populate("author", "username")
     .sort({ createdAt: -1 });
 
-  return res.render("./pages/blog/blogHome", { posts });
+  return res.render("./pages/blog/blogHome", { posts, user: req.user });
 };
 
 module.exports.homePageWriter = async (req, res) => {
@@ -101,4 +101,27 @@ module.exports.profilePage = async (req, res) => {
 
 module.exports.editBio = (req,res)=>{
   return res.render('./pages/writer/editBio',{user:req.user})
+}
+
+module.exports.editBioHandle = async (req,res)=>{
+  try {
+      let {profilePicture , experienceLevel , favoriteArtists , software , favoriteGenre , preferredMood 
+      , city , availability , badges , tags , bio} = req.body;
+
+      let userBioDetails = {profilePicture , experienceLevel , favoriteArtists , software , favoriteGenre , preferredMood 
+      , city , availability , badges , tags , bio};
+
+      if(req.file){
+        userBioDetails.profilePicture = req.file.path;
+      }
+      
+      await User.findByIdAndUpdate(req.user._id, userBioDetails, { new: true });
+      res.redirect('/profile');
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating profile");
+    return res.redirect('/profile');
+  }
+  
 }

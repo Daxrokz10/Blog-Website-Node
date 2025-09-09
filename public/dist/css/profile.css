@@ -71,3 +71,20 @@ body {
 .collection-item img:hover {
   transform: scale(1.05);
 }
+
+.blur-content {
+  filter: blur(2px);
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.6);
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  z-index: 2; /* make sure it's above blur */
+}

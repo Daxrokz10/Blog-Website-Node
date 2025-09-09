@@ -20,7 +20,8 @@ const userSchema = mongoose.Schema({
     availability: { type: Boolean, default: false },
     badges: { type: [String], default: [] },
     tags: { type: [String], default: [] },
-    bio: { type: String, default: "" }
+    bio: { type: String, default: "" },
+    profilePicture:{type: String , default:""}
 });
 
 const User = mongoose.model('user',userSchema);
