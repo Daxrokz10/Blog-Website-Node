@@ -1,0 +1,73 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+  background-color: #0d0d0f;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+}
+
+.profile-card {
+  background: #1a1a1d;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #333;
+  object-fit: cover;
+}
+
+.premium {
+  color: #8ef58e;
+  font-size: 0.9rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.social-icons a {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #bbb;
+  transition: color 0.2s;
+}
+
+.social-icons a:hover {
+  color: #fff;
+}
+
+.card-dark {
+  background: #1e1e22;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.productions-table th,
+.productions-table td {
+  color: #ddd;
+  vertical-align: middle;
+}
+
+.productions-table tr:hover {
+  background: #2a2a2f;
+}
+
+.collection-item img {
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+
+.collection-item img:hover {
+  transform: scale(1.05);
+}

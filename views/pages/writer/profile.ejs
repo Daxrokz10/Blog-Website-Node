@@ -7,49 +7,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
   <!-- Bootstrap CSS v5.3.2 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .profile-header {
-      background: linear-gradient(135deg, #6c63ff, #4e54c8);
-      color: white;
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-    .post-card {
-      border-radius: 12px;
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-    .post-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/dist/css/profile.css">
 </head>
 
 <body>
-  <main>
-    <div class="container mt-4">
+  <main class="container py-4">
 
-      <!-- Profile Header -->
-      <div class="profile-header text-center shadow-sm">
-        <img src="https://i.pravatar.cc/100?u=<%= user.username %>" class="rounded-circle mb-3 border border-light"
-          alt="profile">
-        <h2 class="mb-0"><%= user.username %></h2>
-        <small class="text-light">Member since Nov 22, 2022</small>
+    <!-- Profile -->
+    <div class="profile-card d-flex align-items-center">
+      <img src="https://i.pravatar.cc/150?u=<%= user.username %>" alt="profile" class="profile-img me-4">
+      <div>
+        <h3 class="mb-1"><%= user.username %></h3>
+        <span class="premium">Premium User</span>
+        <p class="mb-0 small">Member since Nov 22, 2022</p>
       </div>
+    </div>
 
-      <!-- Posts Section -->
-      <h4 class="mb-3">Your Posts</h4>
-      <% if (posts.length > 0) { %>
+    <!-- Bio & Details -->
+    <div class="profile-card">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <p><strong>My Role:</strong> Beatmaker</p>
+          <p><strong>My 3 Favorite Artists:</strong> Ninho, Travis Scott, Metro Boomin</p>
+          <p><strong>The Software I Use:</strong> Ableton</p>
+          <p><strong>My City:</strong> California, USA</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Experience:</strong> Intermediate</p>
+          <p><strong>Favorite Genre:</strong> Trap</p>
+          <p><strong>Preferred Mood:</strong> Melancholic</p>
+          <p><strong>Availability:</strong> ✅ Available for Collaboration</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Media -->
+    <div class="profile-card">
+      <h5 class="section-title">Social Media</h5>
+      <div class="social-icons">
+        <a href="#"><i class="bi bi-youtube"></i></a>
+        <a href="#"><i class="bi bi-instagram"></i></a>
+        <a href="#"><i class="bi bi-tiktok"></i></a>
+      </div>
+    </div>
+
+    <!-- Collection -->
+    <div class="profile-card">
+      <h5 class="section-title">My Collection</h5>
+      <% if(posts.length > 0){ %>
         <div class="row g-3">
-          <% posts.forEach(p => { %>
-            <div class="col-md-6">
+          <% posts.forEach(p=>{ %>
+           <div class="col-md-6">
               <div class="card post-card p-3 shadow-sm">
                 <h5>
                   <a href="/posts/<%= p._id %>" class="text-decoration-none text-dark">
@@ -66,20 +75,20 @@
                   <small class="text-muted">Updated: <%= p.updatedAt.toDateString() %></small>
                 </div>
               </div>
-            </div>
+            </div> 
           <% }) %>
         </div>
-      <% } else { %>
-        <p class="text-muted">You haven’t published anything yet.</p>
+      <% } else{ %>
+        <p>You have no posts</p>
       <% } %>
-
     </div>
+    <a href="/editBio ">Edit</a>
   </main>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </body>
 
 </html>

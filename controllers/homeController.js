@@ -98,3 +98,7 @@ module.exports.profilePage = async (req, res) => {
   const posts = await Post.find({ author: req.user._id }).sort({ createdAt: -1 });
   res.render('./pages/writer/profile', { posts, user: req.user });
 };
+
+module.exports.editBio = (req,res)=>{
+  return res.render('./pages/writer/editBio',{user:req.user})
+}
