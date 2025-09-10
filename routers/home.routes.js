@@ -25,4 +25,13 @@ homeRouter.get('/profile', homeController.profilePage);
 homeRouter.get("/editBio",isAuth,homeController.editBio);
 homeRouter.post("/editBio",isAuth,uploadProfile.single('profilePicture'),homeController.editBioHandle);
 
+// delete user
+homeRouter.get('/sureDeleteUser', isAuth, homeController.sureDeleteUser);
+homeRouter.post('/deleteUser', isAuth, homeController.deleteUser);  
+
+//update user password
+homeRouter.get('/updatePassword',isAuth,homeController.updatePassword);
+homeRouter.post('/updatePassword',isAuth,homeController.updatePasswordHandle);
+
+
 module.exports = homeRouter;

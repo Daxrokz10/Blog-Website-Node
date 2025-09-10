@@ -20,7 +20,7 @@
     <div class="profile-card d-flex align-items-center">
       <img src="<%= user.profilePicture && user.profilePicture.trim() !== '' 
           ? user.profilePicture 
-          : 'https://i.pravatar.cc/150?u=' + user.username %>"  alt="profile" class="profile-img me-4">
+          : 'https://i.pravatar.cc/150?u=' + user.username %>" alt="profile" class="profile-img me-4">
       <div>
         <h3 class="mb-1">
           <%= user.username %>
@@ -28,81 +28,71 @@
         <span class="premium">Premium User</span>
         <p class="mb-0 small">Member since Nov 22, 2022</p>
       </div>
-      <div class="ms-auto">
-         <a href="/editBio" class="btn btn-sm btn-success">
-            ✏️ Edit Your Profile
-          </a>
+      <div class="ms-auto d-flex flex-column">
+        <a href="/editBio" class="btn my-1 btn-sm btn-success">
+          ✏️ Edit Your Profile
+        </a>
+        <a href="/sureDeleteUser" class="btn my-1 btn-sm btn-danger">
+          Delete Your Profile
+        </a>
+        <a href="/updatePassword" class="btn my-1 btn-sm btn-warning">Update pass</a>
       </div>
     </div>
 
     <!-- Bio & Details -->
-    <div class="profile-card position-relative">
-      <% if(user.favoriteArtists=="" && user.software=="" && user.favoriteGenre=="" && user.preferredMood=="" &&
+    <div class="profile-card position-relative text-light p-4 rounded-3 shadow-lg">
+      <% if( user.favoriteArtists=="" && user.software=="" && user.favoriteGenre=="" && user.preferredMood=="" &&
         user.city=="" && user.badges=="" && user.tags=="" && user.bio=="" ){ %>
 
-        <!-- Blur this only -->
-        <div class="blur-content">
-          <div class="row g-4">
-            <div class="col-md-12">
-              <div class="row g-4">
-                <div class="col-md-6">
-                  <p><strong>My Role:</strong></p>
-                  <p><strong>My 3 Favorite Artists:</strong></p>
-                  <p><strong>The Software I Use:</strong></p>
-                  <p><strong>My City:</strong></p>
-                </div>
-                <div class="col-md-6">
-                  <p><strong>Experience:</strong></p>
-                  <p><strong>Favorite Genre:</strong></p>
-                  <p><strong>Preferred Mood:</strong></p>
-                  <p><strong>Availability:</strong></p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <!-- Blurred Empty State -->
+        <div class="blur-content text-center py-5">
+          <i class="bi bi-person-lines-fill fs-1 text-secondary d-block mb-3"></i>
+          <p class="text-muted">Your bio looks empty 👀</p>
         </div>
 
         <!-- Overlay (not blurred) -->
-        <div class="overlay-text">
-          <a href="/editBio" class="btn btn-sm btn-success">
+        <div class="overlay-text text-center mt-3">
+          <a href="/editBio" class="btn btn-success btn-sm px-3 rounded-pill shadow-sm">
             ✏️ Complete your bio
           </a>
         </div>
 
         <% } else { %>
           <div class="row g-4">
+            <!-- Left Column -->
             <div class="col-md-6">
-              <p><strong>My Role:</strong>
+              <p><i class="bi bi-person-badge"></i> <strong>My Role:</strong>
                 <%= user.role %>
               </p>
-              <p><strong>My 3 Favorite Artists:</strong>
+              <p><i class="bi bi-music-note-list"></i> <strong>Fav Artists:</strong>
                 <%= user.favoriteArtists %>
               </p>
-              <p><strong>The Software I Use:</strong>
+              <p><i class="bi bi-laptop"></i> <strong>Software I Use:</strong>
                 <%= user.software %>
               </p>
-              <p><strong>My City:</strong>
+              <p><i class="bi bi-geo-alt"></i> <strong>My City:</strong>
                 <%= user.city %>
               </p>
             </div>
+
+            <!-- Right Column -->
             <div class="col-md-6">
-              <p><strong>Experience:</strong>
+              <p><i class="bi bi-bar-chart"></i> <strong>Experience:</strong>
                 <%= user.experienceLevel %>
               </p>
-              <p><strong>Favorite Genre:</strong>
+              <p><i class="bi bi-vinyl"></i> <strong>Fav Genre:</strong>
                 <%= user.favoriteGenre %>
               </p>
-              <p><strong>Preferred Mood:</strong>
+              <p><i class="bi bi-emoji-smile"></i> <strong>Mood:</strong>
                 <%= user.preferredMood %>
               </p>
-              <p><strong>Availability:</strong>
+              <p><i class="bi bi-circle-fill text-success"></i> <strong>Available:</strong>
                 <%= user.availability %>
               </p>
             </div>
           </div>
           <% } %>
     </div>
-
 
     </div>
 
