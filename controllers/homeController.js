@@ -2,6 +2,7 @@ const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const Post = require("../models/Post");
 const passport = require("passport");
+const flash = require('connect-flash');
 
 module.exports.defaultRoute = (req, res) => {
   if (req.isAuthenticated()) {
@@ -193,15 +194,21 @@ module.exports.updatePasswordHandle = async (req, res) => {
       if (newPassword == confirmPassword) {
         user.password = await bcrypt.hash(newPassword, 10);
         await user.save();
+        req.flash('success','Password updated successfully')
         return res.redirect("/logout");
       } else {
-        return res.json("new password and confirm password does not match");
+        req.flash('error',"New password and confirm password don't match");
+        return res.redirect('/updatePassword');
       }
     } else {
-      return res.json("Old password is incorrect");
+      req.flash('error',"Current Password is incorrect");
+
+      return res.redirect('/updatePassword');
     }
   } catch (error) {
     console.log(error);
-    return res.redirect("/profile");
+    req.flash('error',"Unknown error occured");
+
+    return res.redirect('/updatePassword');
   }
 };

@@ -4,6 +4,8 @@ const homeController = require('../controllers/homeController');
 const { isAuth, allowUsers } = require('../middlewares/auth');
 const uploadProfile = require('../middlewares/uploadProfile');
 
+
+
 homeRouter.get('/',homeController.defaultRoute);
 
 homeRouter.get('/admin',homeController.homePageAdmin);

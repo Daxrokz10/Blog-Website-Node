@@ -8,6 +8,8 @@ const router = require('./routers');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const initializePassport = require('./middlewares/passport');
+const flash = require('connect-flash');
+// const { addFlash } = require('./middlewares/flash');
 
 const port = process.env.port || 3000;
 require('dotenv').config(); 
@@ -27,6 +29,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(flash())
 app.use('/',router);
 
 app.listen(port,()=>{
