@@ -60,6 +60,7 @@ module.exports.loginHandle = (req, res, next) => {
       if (user.role === "admin") {
         return res.redirect("/admin");
       } else {
+        req.flash('success','Welcome back user!')
         return res.redirect("/blog");
       }
     });
@@ -82,6 +83,8 @@ module.exports.signupHandle = async (req, res) => {
         password: hashed,
         role,
       });
+      req.flash('success','Welcome new user!')
+      console.log(req.flash('success'));
       console.log("New User Created", newUser);
     }
 
@@ -197,7 +200,7 @@ module.exports.updatePasswordHandle = async (req, res) => {
         req.flash('success','Password updated successfully')
         return res.redirect("/logout");
       } else {
-        req.flash('error',"New password and confirm password don't match");
+        req.flash('error',"New password and confirm password dont match");
         return res.redirect('/updatePassword');
       }
     } else {
