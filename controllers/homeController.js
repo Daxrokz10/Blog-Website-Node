@@ -2,7 +2,10 @@ const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const Post = require("../models/Post");
 const passport = require("passport");
+require('dotenv').config();
 const flash = require('connect-flash');
+const nodemailer = require("nodemailer");
+
 
 module.exports.defaultRoute = (req, res) => {
   if (req.isAuthenticated()) {
@@ -71,26 +74,101 @@ module.exports.signup = (req, res) => {
 };
 module.exports.signupHandle = async (req, res) => {
   const { username, email, password, role } = req.body;
+  const userData = { username, email, password, role }; 
   try {
     const existing = await User.findOne({ $or: [{ username }, { email }] });
     if (existing) {
       return res.redirect("/?signupError=1");
-    } else {
-      const hashed = await bcrypt.hash(password, 10);
-      const newUser = await User.create({
-        username,
-        email,
-        password: hashed,
-        role,
-      });
-      req.flash('success','Welcome new user!')
-      console.log(req.flash('success'));
-      console.log("New User Created", newUser);
-    }
+    } 
 
-    return res.redirect("/login");
+    req.session.userData = { username, email, password, role };
+    // else {
+      // const hashed = await bcrypt.hash(password, 10);
+      // const newUser = await User.create({
+      //   username,
+      //   email,
+      //   password: hashed,
+      //   role,
+      // });
+      // req.flash('success','Welcome new user!')
+    // }
+
+    return res.render("./pages/auth/sendOTP",{userData});
   } catch (error) {
     console.log(error.message);
+    return res.redirect("/signup");
+  }
+};
+
+module.exports.sendOTP = async (req, res) => {
+  try {
+    // Only allow OTP if session has userData
+    if (!req.session.userData) {
+      req.flash("error", "No signup data found. Please signup again.");
+      return res.redirect("/signup");
+    }
+
+    const { username, email } = req.session.userData;
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    req.session.otp = otp;
+
+    // Nodemailer config
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Send OTP mail
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your OTP Code",
+      text: `Hello ${username}, your OTP is: ${otp}`,
+    });
+
+    console.log("✅ OTP Sent:", otp);
+
+    return res.render("./pages/auth/verifyOTP");
+  } catch (error) {
+    console.error("❌ Error sending OTP:", error);
+    req.flash("error", "Could not send OTP. Try again.");
+    return res.redirect("/signup");
+  }
+};
+
+module.exports.verifyOTP = async (req, res) => {
+  try {
+    const { otp } = req.body;
+    console.log(otp)
+    if (parseInt(otp) === req.session.otp) {
+      // hash password and create user
+      const hashed = await bcrypt.hash(req.session.userData.password, 10);
+
+      await User.create({
+        username: req.session.userData.username,
+        email: req.session.userData.email,
+        password: hashed,
+        role: req.session.userData.role,
+      });
+
+      // clear session
+      req.session.otp = null;
+      req.session.userData = null;
+
+      req.flash("success", "Signup successful! Please login.");
+      return res.redirect("/login");
+    } else {
+      req.flash("error", "Invalid OTP, try again.");
+      return res.redirect("/errorpage");
+    }
+  } catch (error) {
+    console.error("❌ Error verifying OTP:", error);
+    req.flash("error", "Verification failed.");
     return res.redirect("/signup");
   }
 };
@@ -215,3 +293,4 @@ module.exports.updatePasswordHandle = async (req, res) => {
     return res.redirect('/updatePassword');
   }
 };
+

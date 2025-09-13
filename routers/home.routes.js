@@ -19,6 +19,9 @@ homeRouter.post('/login',homeController.loginHandle);
 homeRouter.get('/signup',homeController.signup);
 homeRouter.post('/signup',homeController.signupHandle);
 
+homeRouter.post('/sendOTP',homeController.sendOTP);
+homeRouter.post('/verifyOTP',homeController.verifyOTP);
+
 homeRouter.get('/logout',homeController.logout);
 
 homeRouter.get('/profile', homeController.profilePage);
