@@ -63,7 +63,9 @@ module.exports.loginHandle = (req, res, next) => {
       if (user.role === "admin") {
         return res.redirect("/admin");
       } else {
-        req.flash('success','Welcome back user!')
+        if(user.verifiedStatus == false){
+          req.flash('error','Email not verified!');
+        }
         return res.redirect("/blog");
       }
     });
@@ -130,8 +132,8 @@ module.exports.sendOTP = async (req, res) => {
       subject: "Your OTP Code",
       text: `Hello ${username}, your OTP is: ${otp}`,
     });
-
-    console.log("✅ OTP Sent:", otp);
+    req.flash('success','OTP sent successfully');
+    // console.log("✅ OTP Sent:", otp);
 
     return res.render("./pages/auth/verifyOTP");
   } catch (error) {
@@ -154,6 +156,7 @@ module.exports.verifyOTP = async (req, res) => {
         email: req.session.userData.email,
         password: hashed,
         role: req.session.userData.role,
+        verifiedStatus:true,
       });
 
       // clear session
