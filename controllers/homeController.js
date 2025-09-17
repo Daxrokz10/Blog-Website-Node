@@ -1,12 +1,6 @@
 const User = require("../models/userSchema");
-const bcrypt = require("bcrypt");
 const Post = require("../models/Post");
-const passport = require("passport");
-require("dotenv").config();
-const flash = require("connect-flash");
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
-let tempUser;
+const bcrypt = require("bcrypt");
 
 module.exports.defaultRoute = (req, res) => {
   if (req.isAuthenticated()) {
@@ -48,141 +42,6 @@ module.exports.homePageWriter = async (req, res) => {
   res.render("pages/writer/writerHome", {
     user: req.user,
     posts,
-  });
-};
-
-module.exports.login = (req, res) => {
-  return res.render("./pages/auth/login");
-};
-module.exports.loginHandle = (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.redirect("/login?error=1");
-
-    req.logIn(user, (err) => {
-      if (err) return next(err);
-      if (user.role === "admin") {
-        return res.redirect("/admin");
-      } else {
-        if (user.verifiedStatus == false) {
-          req.flash("error", "Email not verified!");
-        }
-        return res.redirect("/blog");
-      }
-    });
-  })(req, res, next);
-};
-module.exports.signup = (req, res) => {
-  return res.render("./pages/auth/signup");
-};
-module.exports.signupHandle = async (req, res) => {
-  const { username, email, password, role } = req.body;
-  const userData = { username, email, password, role };
-  try {
-    const existing = await User.findOne({ $or: [{ username }, { email }] });
-    if (existing) {
-      return res.redirect("/?signupError=1");
-    }
-
-    req.session.userData = { username, email, password, role };
-    // else {
-    // const hashed = await bcrypt.hash(password, 10);
-    // const newUser = await User.create({
-    //   username,
-    //   email,
-    //   password: hashed,
-    //   role,
-    // });
-    // req.flash('success','Welcome new user!')
-    // }
-
-    return res.render("./pages/auth/sendOTP", { userData });
-  } catch (error) {
-    console.log(error.message);
-    return res.redirect("/signup");
-  }
-};
-
-module.exports.sendOTP = async (req, res) => {
-  try {
-    // Only allow OTP if session has userData
-    if (!req.session.userData) {
-      req.flash("error", "No signup data found. Please signup again.");
-      return res.redirect("/signup");
-    }
-
-    const { username, email } = req.session.userData;
-
-    // Generate OTP
-    // const otp = Math.floor(100000 + Math.random() * 900000);
-    const otp = crypto.randomInt(100000, 999999).toString();
-    req.session.otp = otp;
-    console.log(otp);
-
-    // Nodemailer config
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    // Send OTP mail
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Your OTP Code",
-      text: `Hello ${username}, your OTP is: ${otp}`,
-    });
-    req.flash("success", "OTP sent successfully");
-    // console.log("✅ OTP Sent:", otp);
-
-    return res.render("./pages/auth/verifyOTP");
-  } catch (error) {
-    console.error("❌ Error sending OTP:", error);
-    req.flash("error", "Could not send OTP. Try again.");
-    return res.redirect("/signup");
-  }
-};
-
-module.exports.verifyOTP = async (req, res) => {
-  try {
-    const { otp } = req.body;
-    console.log(otp);
-    if (otp === req.session.otp) {
-      // hash password and create user
-      const hashed = await bcrypt.hash(req.session.userData.password, 10);
-
-      await User.create({
-        username: req.session.userData.username,
-        email: req.session.userData.email,
-        password: hashed,
-        role: req.session.userData.role,
-        verifiedStatus: true,
-      });
-
-      // clear session
-      req.session.otp = null;
-      req.session.userData = null;
-
-      req.flash("success", "Signup successful! Please login.");
-      return res.redirect("/login");
-    } else {
-      req.flash("error", "Invalid OTP, try again.");
-      return res.redirect("/errorpage");
-    }
-  } catch (error) {
-    console.error("❌ Error verifying OTP:", error);
-    req.flash("error", "Verification failed.");
-    return res.redirect("/signup");
-  }
-};
-
-module.exports.logout = (req, res, next) => {
-  req.logout((err) => {
-    if (err) return next(err);
-    res.redirect("/login");
   });
 };
 
@@ -237,7 +96,6 @@ module.exports.editBioHandle = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error updating profile");
-    return res.redirect("/profile");
   }
 };
 
@@ -247,122 +105,17 @@ module.exports.sureDeleteUser = (req, res) => {
 
 module.exports.deleteUser = async (req, res) => {
   try {
-    let user = await User.findById(req.user._id);
-    let valid = await bcrypt.compare(req.body.password, user.password);
+    const user = await User.findById(req.user._id);
+    const valid = await bcrypt.compare(req.body.password, user.password);
     if (valid) {
-      let deletedUser = await User.findByIdAndDelete(req.user._id);
+      await User.findByIdAndDelete(req.user._id);
       res.redirect("/login");
     } else {
-      console.log("Error Deleting User here");
+      req.flash("error", "Password incorrect");
       res.redirect("/profile");
     }
   } catch (error) {
-    console.log("Error Deleting User");
+    console.log("Error Deleting User:", error);
     res.redirect("/profile");
-  }
-};
-
-module.exports.updatePassword = (req, res) => {
-  try {
-    return res.render("./pages/auth/updatePassword");
-  } catch (error) {
-    console.log(error);
-    return res.redirect("/profile");
-  }
-};
-
-module.exports.updatePasswordHandle = async (req, res) => {
-  try {
-    let { oldPassword, newPassword, confirmPassword } = req.body;
-    let user = await User.findById(req.user._id);
-    let isValid = await bcrypt.compare(oldPassword, user.password);
-
-    if (isValid) {
-      if (newPassword == confirmPassword) {
-        user.password = await bcrypt.hash(newPassword, 10);
-        await user.save();
-        req.flash("success", "Password updated successfully");
-        return res.redirect("/logout");
-      } else {
-        req.flash("error", "New password and confirm password dont match");
-        return res.redirect("/updatePassword");
-      }
-    } else {
-      req.flash("error", "Current Password is incorrect");
-
-      return res.redirect("/updatePassword");
-    }
-  } catch (error) {
-    console.log(error);
-    req.flash("error", "Unknown error occured");
-
-    return res.redirect("/updatePassword");
-  }
-};
-
-module.exports.verifyEmailForForgetPassPage = (req, res) => {
-  return res.render("./pages/auth/verifyEmailForForgetPass");
-};
-
-module.exports.verifyEmailForForgetPass = async (req, res) => {
-  const { email } = req.body;
-  let user = await User.findOne({ email });
-  tempUser = user;
-  if (user) {
-    const otp = crypto.randomInt(100000, 999999).toString();
-    req.session.otp = otp;
-    console.log(otp);
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    // Send OTP mail
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Your OTP Code",
-      text: `Hello your OTP is: ${otp}`,
-    });
-    req.flash("success", "Email verified successfully!");
-
-    res.render("./pages/auth/forgotPasswordOTP");
-  }
-};
-
-module.exports.forgotPasswordOTP = (req, res) => {
-  const { otp } = req.body;
-  try {
-    if (otp == req.session.otp) {
-      res.render("./pages/auth/forgotPassword");
-    } else {
-      req.flash("error", "Invalid OTP");
-      res.redirect("/verifyEmailForForgetPass");
-    }
-  } catch (error) {
-    console.log(error.message);
-    res.redirect("/verifyEmailForForgetPass");
-  }
-};
-
-module.exports.forgotPassword = async (req, res) => {
-  const { newPassword, confirmPassword } = req.body;
-
-  try {
-    if (newPassword == confirmPassword) {
-      let user = await User.findById(tempUser._id);
-      user.password = await bcrypt.hash(newPassword, 10);
-      await user.save();
-      tempUser = {};
-      return res.redirect("/login");
-    } else {
-      console.log("Failed verification");
-    }
-  } catch (error) {
-    console.log(error.message);
   }
 };
