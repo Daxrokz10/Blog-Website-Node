@@ -328,7 +328,7 @@ module.exports.verifyEmailForForgetPass = async (req, res) => {
       subject: "Your OTP Code",
       text: `Hello your OTP is: ${otp}`,
     });
-    req.flash("success", "OTP sent successfully");
+    req.flash("success", "Email verified successfully!");
 
     res.render("./pages/auth/forgotPasswordOTP");
   }
