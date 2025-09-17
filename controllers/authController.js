@@ -32,7 +32,7 @@ module.exports.loginHandle = (req, res, next) => {
 };
 
 module.exports.signup = (req, res) => {
-  return res.render("./pages/auth/signup");
+  return res.render("./pages/auth/signup/signup");
 };
 
 module.exports.signupHandle = async (req, res) => {
@@ -44,7 +44,7 @@ module.exports.signupHandle = async (req, res) => {
     }
 
     req.session.userData = { username, email, password, role };
-    return res.render("./pages/auth/sendOTP", { userData: req.session.userData });
+    return res.render("./pages/auth/signup/sendOTP", { userData: req.session.userData });
   } catch (error) {
     console.log(error.message);
     return res.redirect("/signup");
@@ -79,7 +79,7 @@ module.exports.sendOTP = async (req, res) => {
     });
 
     req.flash("success", "OTP sent successfully");
-    return res.render("./pages/auth/verifyOTP");
+    return res.render("./pages/auth/signup/verifyOTP");
   } catch (error) {
     console.error("Error sending OTP:", error);
     req.flash("error", "Could not send OTP. Try again.");
@@ -126,7 +126,7 @@ module.exports.logout = (req, res, next) => {
 
 // Update password (inside profile)
 module.exports.updatePassword = (req, res) => {
-  return res.render("./pages/auth/updatePassword");
+  return res.render("./pages/auth/updatePassword/updatePassword");
 };
 
 module.exports.updatePasswordHandle = async (req, res) => {
@@ -158,7 +158,7 @@ module.exports.updatePasswordHandle = async (req, res) => {
 
 // Forgot password flow
 module.exports.verifyEmailForForgetPassPage = (req, res) => {
-  return res.render("./pages/auth/verifyEmailForForgetPass");
+  return res.render("./pages/auth/forgotPassword/verifyEmailForForgetPass");
 };
 
 module.exports.verifyEmailForForgetPass = async (req, res) => {
@@ -187,17 +187,17 @@ module.exports.verifyEmailForForgetPass = async (req, res) => {
     });
 
     req.flash("success", "Email verified successfully!");
-    return res.render("./pages/auth/forgotPasswordOTP");
+    return res.render("./pages/auth/forgotPassword/forgotPasswordOTP");
   } else {
     req.flash("error", "Email not found");
-    return res.redirect("/verifyEmailForForgetPass");
+    return res.redirect("/forgot-password");
   }
 };
 
 module.exports.forgotPasswordOTP = (req, res) => {
   const { otp } = req.body;
   if (otp == req.session.otp) {
-    return res.render("./pages/auth/forgotPassword");
+    return res.render("./pages/auth/forgotPassword/forgotPassword");
   } else {
     req.flash("error", "Invalid OTP");
     return res.redirect("/verifyEmailForForgetPass");
