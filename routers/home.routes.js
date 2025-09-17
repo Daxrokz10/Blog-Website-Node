@@ -22,6 +22,12 @@ homeRouter.post('/signup',homeController.signupHandle);
 homeRouter.post('/sendOTP',homeController.sendOTP);
 homeRouter.post('/verifyOTP',homeController.verifyOTP);
 
+homeRouter.get('/verifyEmailForForgetPass',homeController.verifyEmailForForgetPassPage);
+homeRouter.post('/verifyEmailForForgetPass',homeController.verifyEmailForForgetPass);
+
+homeRouter.post('/forgotPasswordOTP',homeController.forgotPasswordOTP);
+homeRouter.post('/forgotPassword',homeController.forgotPassword)
+
 homeRouter.get('/logout',homeController.logout);
 
 homeRouter.get('/profile', homeController.profilePage);
